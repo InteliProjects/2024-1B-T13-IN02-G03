@@ -1,0 +1,582 @@
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<!-- <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script> -->
+<link rel="stylesheet" href="./../../assets/styles/global.css" />
+<link
+  href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css"
+  rel="stylesheet"
+/>
+
+<%- include ('../componentes/header.ejs'); %> <%- include
+('../componentes/abaAdmin.ejs'); %>
+
+<body style="background-color:var(--color-gray-100);"></body>
+<div class="areaGraficos">
+  <div class="flex-container">
+      <div class="flex-row">
+          <div class="flex-col quarter" id="tres-primeiros">
+              <div class="graph" style="height: 50%;" id='table'>
+                  <label class="label">Quantidade de Montadores</label>
+              </div>
+              <div class="graph" style="height: 50%;" id="linhas">
+                <label class="label">Quantidade de Linhas</label>
+              </div>
+          </div>
+          <div class="graph quarter">
+              <canvas id="secondgraph" aria-label="Gráfico 2"></canvas>
+          </div>
+          <div class="graph half">
+              <canvas id="firstgraph" aria-label="Gráfico 1"></canvas>
+          </div>
+      </div>
+      <div class="flex-row">
+          <div class="graph forty">
+              <canvas style='height: 80%;' id="thirdgraph" aria-label="Gráfico 3"></canvas>
+          </div>
+          <div class="graph forty centered" style="padding-top: 12px;" id='grafico-users'>
+            <label style="font-size: 12px;">Manuais pendentes por montador</label>
+            <select id="linesSelect" aria-label="Select label" class="selectLine opcao">
+              <option value="" class="dds__select__option--placeholder" selected="true">Selecione uma linha</option>
+          </select>
+              <canvas id="fourthgraph" aria-label="Gráfico 4"></canvas>
+          </div>
+          <div class="graph twenty">
+            
+              <select id="groupsSelect" aria-label="Select label" class="selectGroup opcao">
+                  <option value="" class="dds__select__option--placeholder" selected="true">Selecione um manual</option>
+              </select>
+              <canvas id="fifthgraph" aria-label="Gráfico 5"></canvas>
+          </div>
+      </div>
+  </div>
+</div>
+<div style="height: 10%; background-color: var(--color-gray-100);"></div>
+</body>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script>
+    let meuGraficoDePizza
+  $(document).ready(function () {
+    // Inicializar o Select2 no elemento <select>
+    $(".selectGroup").select2({
+      placeholder: "Selecionar um manual",
+    });
+
+    // Adicionar um ouvinte de eventos para mudanças na seleção
+    $(".selectGroup").on("change", function () {
+      const idManual = $(this).val();
+      axios
+        .get(`/task/findByHandbook/${idManual}`)
+        .then((response) => {
+          const { readTrue, readFalse } = response.data;
+
+          inicializarGraficoPorManual(readTrue, readFalse);
+        })
+        .catch((error) => {
+          console.error("Error fetching manual data:", error);
+        });
+    });
+  });
+
+  $(document).ready(function () {
+    // Inicializar o Select2 no elemento <select>
+    $(".selectLine").select2({
+      placeholder: "Selecionar uma linha",
+    });
+
+    // Adicionar um ouvinte de eventos para mudanças na seleção
+    $(".selectLine").on("change", function () {
+      const idLinha = $(this).val();
+      axios
+        .get(`/group/${idLinha}/graph`)
+        .then((response) => {
+              inicializarGraficoTarefasPorUsuario(response.data)
+        })
+        .catch((error) => {
+          console.error("Error fetching manual data:", error);
+        });
+    });
+  });
+
+  window.addEventListener("load", function () {
+    carregarDadosDasTarefas();
+  });
+
+  function carregarDadosDasTarefas() {
+    axios
+      .get("/task/findNumber")
+      .then(function (response) {
+        var readTrue = response.data.readTrue;
+        var readFalse = response.data.readFalse;
+        inicializarGraficoPizza(readTrue, readFalse);
+      })
+      .catch(function (error) {
+        console.error("Erro ao carregar os dados das tarefas:", error);
+      });
+
+    axios
+      .get("/task/findGroup")
+      .then(function (response) {
+        let responseData = response.data; // Changed from `let response` to `let responseData`
+        console.log(responseData);
+        inicializarGraficoBarraNaoFeitos(responseData);
+      })
+      .catch(function (error) {
+        console.error("Erro ao carregar os dados das tarefas:", error);
+      });
+    axios.get("/users/findNum").then(function (response) {
+      const num = response.data
+      inicializarInfoDeUsuarios(num);
+    });
+    axios
+      .get("/task/findByGroup")
+      .then(function (response) {
+        let responseData = response.data; // Changed from `let response` to `let responseData`
+        console.log(responseData);
+        inicializarGraficoBarraFeitos(responseData);
+      })
+      .catch(function (error) {
+        console.error("Erro ao carregar os dados das tarefas:", error);
+      });
+    axios.get("/group/linhas2").then(function (response) {
+      let usersByLine = response.data;
+      // inicializarGraficoDeLinha(usersByLine);
+    });
+  }
+
+  fetch("/handbook")
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(
+          `HTTP error! status: ${response.status} - ${response.statusText}`
+        );
+      }
+      return response.json();
+    })
+    .then((data) => {
+      console.log("Fetched handbooks:", data); // Log the data received
+      const groupSelect = document.getElementById("groupsSelect");
+
+      // Clear existing options (except the default one)
+      groupSelect.innerHTML = '<option value="">Select a manual</option>';
+
+      data.forEach((manual) => {
+        const option = document.createElement("option");
+        option.value = manual.id; // Set manual ID as value
+        option.textContent = manual.title; // Set manual name as text content
+        groupSelect.appendChild(option);
+      });
+    })
+    .catch((error) => {
+      console.error("Error fetching handbooks:", error);
+      alert("Failed to fetch handbooks. Please try again later.");
+    });
+    fetch("/group")
+        .then((response) => response.json())
+        .then((data) => {
+          const groupSelect = document.getElementById("linesSelect");
+          const linhasFiltradas = [];
+          data.forEach((group) => {
+            if (!linhasFiltradas.includes(group.assembly_line)) {
+              linhasFiltradas.push(group.assembly_line);
+            }
+          });
+          console.log(linhasFiltradas)
+          inicializarQuantidadeDeLinhas(linhasFiltradas)
+          linhasFiltradas.forEach((linha) => {
+            console.log(linha);
+
+            const option1 = document.createElement("option");
+            option1.value = linha;
+            option1.textContent = "Linha " + linha;
+            groupSelect.appendChild(option1);
+          });
+        })
+        .catch((error) => console.error("Error fetching groups:", error));
+
+  function inicializarGraficoPizza(readTrue, readFalse) {
+    var ctx2 = document.getElementById("secondgraph").getContext("2d");
+    var meuGraficoDePizza = new Chart(ctx2, {
+      type: "pie",
+      data: {
+        labels: [`Feito: ${readTrue}`, `Não Feito: ${readFalse}`],
+        datasets: [
+          {
+            label: "Progresso dos Manuais",
+            data: [readTrue, readFalse],
+            backgroundColor: ["#0063b8", "#BB2A33"],
+            borderColor: ["#ffffff", "#ffffff"],
+            borderWidth: 2,
+          },
+        ],
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        layout: {
+          padding: {
+            bottom: 20,
+          },
+        },
+      },
+    });
+  }
+
+  function inicializarGraficoPizza(readTrue, readFalse) {
+    var ctx2 = document.getElementById("secondgraph").getContext("2d");
+    var meuGraficoDePizza = new Chart(ctx2, {
+      type: "pie",
+      data: {
+        labels: [`Feito: ${readTrue}`, `Não Feito: ${readFalse}`],
+        datasets: [
+          {
+            label: "Progresso dos Manuais",
+            data: [readTrue, readFalse],
+            backgroundColor: ["#0063b8", "#BB2A33"],
+            borderColor: ["#ffffff", "#ffffff"],
+            borderWidth: 2,
+          },
+        ],
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        layout: {
+          padding: {
+            bottom: 20,
+          },
+        },plugins: {
+                title: {
+                    display: true,
+                    text: 'Quantidade manuais totais',
+                    font: {
+                        size: 12,  // Font size of the titlej
+                        family: "Roboto",
+                        weight: 'normal', // Font family of the titl
+                    },
+                    color: 'rgb(99, 99, 99)', // Color of the title text
+                    align: 'start', // Alignment of the title ('start', 'center', 'end')
+                    padding: {
+                        top: 0,
+                        bottom: 5
+                    }
+                }
+            }
+        ,
+      },
+    });
+  }
+
+  function inicializarGraficoBarraNaoFeitos(response) {
+    var ctx1 = document.getElementById("firstgraph").getContext("2d");
+
+    var labels = Object.keys(response.lines).map((line) => `Linha ${line}`);
+    var dataValues = Object.keys(response.lines).map((line) => {
+        return response.lines[line] ? response.lines[line].length : 0;
+    });
+
+    var meuGraficoDeBarras2 = new Chart(ctx1, {
+        type: "bar",
+        data: {
+            labels: labels,
+            datasets: [
+                {
+                    label: "N° de Manuais Pendentes",
+                    data: dataValues,
+                    backgroundColor: "#BB2A33",
+                    borderColor: "#BB2A33",
+                    borderWidth: 1,
+                },
+            ],
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            layout: {
+                padding: {
+                    bottom: 10,
+                },
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                },
+            },
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'Quantidade de manuais pendentes por linha',
+                    font: {
+                        size: 12,  // Font size of the title
+                        family: "Roboto",
+                        weight: 'normal', // Font family of the titl
+                    },
+                    color: 'rgb(99, 99, 99)', // Color of the title text
+                    align: 'start', // Alignment of the title ('start', 'center', 'end')
+                    padding: {
+                        top: 0,
+                        bottom: 30
+                    }
+                }
+            }
+        },
+    });
+}
+
+  function inicializarInfoDeUsuarios(data) {
+    document.querySelector("#table").innerHTML += `
+        <p style="color: #0063b8; font-size: 36px;font-weight:500; margin-bottom: 32px;">${data}</p>
+        `
+  }
+  function inicializarQuantidadeDeLinhas(data) {
+    document.querySelector("#linhas").innerHTML += `
+        <p style="color: #0063b8; font-size: 36px;font-weight:500; margin-bottom: 32px;">${data.length}</p>
+        `
+  }
+  function inicializarGraficoBarraFeitos(response) {
+    var ctx1 = document.getElementById("thirdgraph").getContext("2d");
+
+    var labels = Object.keys(response.lines).map((line) => `Linha ${line}`);
+    var dataValues = Object.keys(response.lines).map((line) => {
+        return response.lines[line] ? response.lines[line].length : 0;
+    });
+
+    var meuGraficoDeBarras2 = new Chart(ctx1, {
+        type: "bar",
+        data: {
+            labels: labels,
+            datasets: [
+                {
+                    label: "N° de Manuais Feitos",
+                    data: dataValues,
+                    backgroundColor: "#0063b8",
+                    borderColor: "#0063b8",
+                    borderWidth: 1,
+                },
+            ],
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            layout: {
+                padding: {
+                    bottom: 10,
+                },
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                },
+            },
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'Quantidade de manuais feitos por linha',
+                    font: {
+                        size: 12,  // Font size of the title
+                        family: "Roboto",
+                        weight: 'normal', // Font family of the titl
+                    },
+                    color: 'rgb(99, 99, 99)', // Color of the title text
+                    align: 'start', // Alignment of the title ('start', 'center', 'end')
+                }
+            }
+        },
+    });
+}
+
+  // function inicializarGraficoDeLinha(data) {
+  //   // Verifica se 'data' é um objeto e extrai os arrays
+  //   if (typeof data === "object" && data !== null) {
+  //     const usersPerLine = Object.values(data);
+  //     console.log(usersPerLine);
+
+  //     // Verifica se todos os valores extraídos são arrays
+  //     if (usersPerLine.every(Array.isArray)) {
+  //       const counts = usersPerLine.map((element) => {
+  //         const count = element.length;
+  //         console.log(count);
+  //         return count;
+  //       });
+
+  //       // Configuração do gráfico de linha usando Chart.js
+  //       const ctx = document.getElementById("fourthgraph").getContext("2d");
+  //       const myChart = new Chart(ctx, {
+  //         type: "line",
+  //         data: {
+  //           labels: counts.map((_, index) => `Linha ${index + 1}`), // Labels para cada linha
+  //           datasets: [
+  //             {
+  //               label: "N° de usuários por linha",
+  //               data: counts,
+  //               borderColor: "#0063b8",
+  //               backgroundColor: "#0063b8",
+  //               borderWidth: 3,
+  //             },
+  //           ],
+  //         },
+  //         options: {
+  //           scales: {
+  //             y: {
+  //               beginAtZero: true,
+  //               ticks: {
+  //                 stepSize: 1, // Define o intervalo entre os ticks no eixo Y
+  //               },
+  //             },
+  //           },
+  //           plugins: {
+  //               title: {
+  //                   display: true,
+  //                   text: 'Quantidade de usuários por linha',
+  //                   font: {
+  //                       size: 12,  // Font size of the title
+  //                       family: "Roboto",
+  //                       weight: 'normal',
+  //                        // Font family of the titl
+  //                   },
+  //                   color: 'rgb(99, 99, 99)', // Color of the title text
+  //                   align: 'start', // Alignment of the title ('start', 'center', 'end')
+  //                   padding: {
+  //                       top: 10,
+  //                       bottom: 0
+  //                   },
+  //                   margin:{
+  //                     top: 50
+  //                   }
+                    
+  //               }
+  //           }
+  //         },
+  //       });
+
+  //       return counts;
+  //     } else {
+  //       console.error("Nem todos os valores no objeto são arrays.");
+  //       return [];
+  //     }
+  //   } else {
+  //     console.error("O parâmetro data não é um objeto válido.");
+  //     return [];
+  //   }
+  // }
+
+  const select = document.getElementById("groupsSelect");
+  select.addEventListener("change", () => {
+    console.log("dsdsdsd");
+    var selectedValues = $(".selectGroup").val();
+  });
+  // Faz a requisição para o endpoint com o valor selecionado
+
+  function inicializarGraficoPorManual(readTrue, readFalse) {
+    const ctx2 = document.getElementById("fifthgraph").getContext("2d");
+
+    // Destroy existing chart instance if it exists
+    if (meuGraficoDePizza) {
+      meuGraficoDePizza.destroy();
+    }
+
+    // Create new chart instance
+    meuGraficoDePizza = new Chart(ctx2, {
+      type: "pie",
+      data: {
+        labels: [`Feito: ${readTrue}`, `Não Feito: ${readFalse}`],
+        datasets: [
+          {
+            label: "Progresso dos Manuais",
+            data: [readTrue, readFalse],
+            backgroundColor: ["#0063b8", "#BB2A33"],
+            borderColor: ["#ffffff", "#ffffff"],
+            borderWidth: 2,
+          },
+        ],
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        layout: {
+          padding: {
+            bottom: 20,
+          },
+        },
+      },
+    });
+  }
+  let myPieChart;
+
+  function inicializarGraficoTarefasPorUsuario(data) {
+    console.log(data); // Debug para ver os dados recebidos
+
+    // Extrai os nomes e valores dos dados
+    const labels = Object.keys(data);
+    const values = Object.values(data);
+    console.log(labels, values); // Debug para verificar os valores extraídos
+
+    // Cores para cada segmento do gráfico
+    const colors = [
+        "#1282D6", "#BB2A33", "#0EA0A9", "#A8396F", "#002A58", "#C96100",
+        "#044E52", "#CB548D", "#0063B8", "#7D2E00", "#0B7C84", "#7F234F",
+    ];
+
+    const borderColors = [
+        '#1282D6'
+    ];
+
+    // Certifique-se de que o elemento canvas existe no documento
+    const canvas = document.getElementById('fourthgraph');
+    if (!canvas) {
+        console.error('Elemento canvas não encontrado!');
+        return;
+    }
+
+    const ctx = canvas.getContext('2d');
+
+    // Destrói o gráfico anterior se existir
+    if (window.myPieChart instanceof Chart) {
+        window.myPieChart.destroy();
+    }
+
+    // Cria um novo gráfico de linha
+    window.myPieChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'N° de manuais pendentes',
+                data: values,
+                backgroundColor: colors,
+                borderColor: borderColors,
+                borderWidth: 3
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        stepSize: 1, // Define o intervalo entre os ticks no eixo Y
+                    },
+                },
+            },
+            plugins: {
+                title: {
+                    display: true,
+                    font: {
+                        size: 12,
+                        family: "Roboto",
+                        weight: 'normal',
+                    },
+                    color: 'rgb(99, 99, 99)', // Color of the title text
+                    align: 'start', // Alignment of the title ('start', 'center', 'end')
+                    padding: {
+                        top: 10,
+                        bottom: 0
+                    },
+                    margin: {
+                        top: 50
+                    }
+                }
+            }
+        },
+    });
+}
+
+</script>

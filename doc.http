@@ -1,0 +1,264 @@
+// ---------------------- ROTAS USERS ----------------------
+### Testa login
+POST http://localhost:1337/login
+Content-Type: application/json
+
+{
+    "email": "peter@and.com",
+    "password": "pas1234"
+}
+
+### Retorna uma lista de todos os usuários
+GET http://localhost:1337/users
+Content-Type: application/json
+
+GET http://localhost:1337/users/groups
+Content-Type: application/json
+
+### Retorna os detalhes de um usuário específico /:id
+GET http://localhost:1337/users/24
+Content-Type: application/json
+
+### Cria um novo usuário (Semelhante ao register)
+POST http://localhost:1337/users
+Content-Type: application/json
+
+{
+  "name": "Pedro",
+  "email": "peter@and.com",
+  "password": "pas123",
+  "cpf": "12345678300",
+  "birth": "2006-01-01",
+  "role": "user",
+  "photo_user": "http://example.com/photos/johndoe.jpg"
+}
+
+### Atualiza as informações de um usuário existente (/:id)
+PUT http://localhost:1337/users/1
+Content-Type: application/json
+
+{
+  "name": "Leo",
+  "email": "leo@and.com",
+  "password": "pass123",
+  "cpf": "12345678900",
+  "birth": "1990-01-01",
+  "role": "user",
+  "photo_user": "http://example.com/photos/johndoe.jpg"
+}
+
+### Remove um usuário (/:id)
+DELETE http://localhost:1337/users/1
+Content-Type: application/json
+
+### Retorna uma lista de todos os usuários
+GET http://localhost:1337/users/findNum
+Content-Type: application/json
+
+// ---------------------- ROTAS HANDBOOKS ----------------------
+
+### Atualizar o status de leitura da tarefa
+
+GET  http://localhost:1337/handbook/read/224/24
+
+
+### Obter uma lista de todos os manuais
+GET http://localhost:1337/handbook/221/materials
+
+### Obter uma lista de todos os manuais
+GET http://localhost:1337/handbook
+
+### Obter os detalhes de um manual
+GET http://localhost:1337/handbook/405
+
+### Criar um novo manual
+POST http://localhost:1337/handbook
+Content-Type: application/json
+
+  {
+    "title": "Latitude 5440",
+    "description": "Este é um manual de montagem para o Latitude 3440",
+    "version": "1.0",
+    "id_materials": 1,
+    "id_products": 1,
+    "id_feedbacks": 1
+  }
+
+### Atualizar o status de um manual existente
+PUT http://localhost:1337/handbook/105
+Content-Type: application/json
+
+  {
+    "title": "Latitude 5440"
+  }
+
+### DELETE Remover um manual existente
+DELETE http://localhost:1337/handbook/1
+
+// ---------------------- ROTAS MATERIALS ----------------------
+### Obter uma lista de todos os materiais de manuais
+PUT http://localhost:1337/handbook/read
+Content-Type: application/json
+
+{
+  "id_users": 25,
+  "id_handbook": 157
+}
+
+
+### Obter uma lista de todos os materiais de manuais
+GET http://localhost:1337/material
+
+### Criar um tipo de material
+POST http://localhost:1337/material
+Content-Type: application/json
+
+{
+  "file": "doc1.com",
+  "type": "PDF",
+  "title": "PDF Manual de montagem para o Latitude 3440",
+  "id_handbooks": 105
+}
+
+### Visualizar um tipo de material específico de manual existente
+GET http://localhost:1337/material/2
+
+### Atualizar o arquivo específico de manual existente
+PUT http://localhost:1337/material/1
+Content-Type: application/json
+
+{
+  "file": "doc2.com",
+  "type": "FFFF"
+  
+}
+
+### Remover um tipo de arquivo específico de manual existente
+DELETE http://localhost:1337/material/2
+
+### Postar mais de um arquivo de vez //FALTA DESCOBRIR COMO FAZER
+
+
+// ---------------------- ROTAS GROUPS ----------------------
+
+### Obter uma lista de todos as linhas de montagens
+GET http://localhost:1337/group/2/linhas
+### LINHAS
+GET http://localhost:1337/listUserPerLine
+### Criar uma linha de montagem
+POST http://localhost:1337/group
+Content-Type: application/json
+
+{
+  "assembly_line": 1,
+  "id_users": 1
+}
+
+### Visualizar uma linha de montagem específica
+GET http://localhost:1337/group
+
+### Atualizar linha de montagem existente
+PUT http://localhost:1337/group/1
+Content-Type: application/json
+
+{
+  "assembly_line": 2,
+  "id_users": 2
+}
+
+### Remover uma linha de montagem
+DELETE http://localhost:1337/group/2
+
+### Usuários Por Linhas
+GET http://localhost:1337/group/1/linhas
+
+### Usuários por Linhas 2 
+GET http://localhost:1337/group/linhas2
+
+### Gráficos por linha
+GET http://localhost:1337/group/1/graph
+
+// ---------------------- ROTAS PRODUCTS ----------------------
+
+### Obter uma lista de todos os produtos
+GET http://localhost:1337/product
+
+### Criar um produto novo
+POST http://localhost:1337/product
+Content-Type: application/json
+
+{
+  "name": "Notebook Inspiron 15",
+  "type": "Notebook",
+  "model": "12ª geração Intel® Core™  i3-1215U (6-core, cache de 10MB, até 4.4GHz)"
+}
+
+### Visualizar um produto específico
+GET http://localhost:1337/product/1
+
+### Atualizar um produto existente
+PUT http://localhost:1337/product/1
+Content-Type: application/json
+
+{
+  "name": "Notebook Inspiron 15",
+  "type": "Notebook",
+  "model": "12ª geração Intel® Core™  i3-1215U (6-core, cache de 10MB, até 4.4GHz)"
+}
+
+### Remover produto
+DELETE http://localhost:1337/product/1
+
+// ---------------------- ROTAS TASKS ----------------------
+
+### Obter uma lista de todos as tarefas
+GET http://localhost:1337/task
+
+### Obter uma lista de todos as tarefas
+GET http://localhost:1337/users/21/UndoneTasks
+
+### Criar uma nova tarefa
+POST http://localhost:1337/task
+Content-Type: application/json
+
+{
+  "read": false,
+  "important": true,
+  "id_users":24 ,
+  "id_handbooks": 223
+}
+
+### Visualizar uma tarefa específica
+GET http://localhost:1337/task/111
+
+### Atualizar uma tarefa existente
+PUT http://localhost:1337/task/217
+Content-Type: application/json
+
+{
+  "read": true,
+  "important": true,
+  "id_users": 41,
+  "id_handbooks": 106
+}
+
+### Remover tarefa existente
+DELETE http://localhost:1337/task/471
+
+### Buscar manual designado atravéz do Id do usuário e não feito
+GET http://localhost:1337/users/29/UndoneTasks
+
+### Buscar manual designado atravéz do Id do usuário e feito
+GET http://localhost:1337/users/29/DoneTasks
+
+### Buscar manual designado atravéz do Id do usuário e feito
+GET http://localhost:1337/task/218/FilterImagem
+
+### Buscar manual designado atravéz do Id do usuário e feito
+GET http://localhost:1337/task/findNumber 
+
+### Buscar manual designado atravéz do Id do usuário e feito
+GET http://localhost:1337/task/findByGroup 
+
+### Buscar manual designado atravéz do Id do usuário e feito
+GET http://localhost:1337/task/findByHandbook/111

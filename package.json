@@ -1,0 +1,43 @@
+{
+  "name": "src",
+  "private": true,
+  "version": "0.0.0",
+  "description": "a Sails application",
+  "keywords": [],
+  "dependencies": {
+    "@sailshq/connect-redis": "^6.1.3",
+    "@sailshq/lodash": "^3.10.6",
+    "@sailshq/socket.io-redis": "^6.1.2",
+    "assert": "^2.1.0",
+    "grunt": "1.0.4",
+    "jsonwebtoken": "^9.0.2",
+    "mocha": "^10.4.0",
+    "sails": "^1.5.11",
+    "sails-hook-grunt": "^5.0.0",
+    "sails-hook-orm": "^4.0.3",
+    "sails-hook-sockets": "^3.0.0",
+    "sails-postgresql": "^5.0.1",
+    "sinon": "^18.0.0",
+    "supertest": "^7.0.0"
+  },
+  "scripts": {
+    "start": "NODE_ENV=production node app.js",
+    "test": "nyc --reporter=lcov --reporter=text --show-process-tree mocha -v test/lifecycle.test.js test/**/*.test.js",
+    "lint": "./node_modules/eslint/bin/eslint.js . --max-warnings=0 --report-unused-disable-directives && echo '✔  Your .js files look good.'",
+    "custom-tests": "echo \"(No other custom tests yet.)\" && echo",
+    "coverage": "nyc npm test"
+  },
+  "main": "app.js",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/anonymous node/sails user/src.git"
+  },
+  "author": "anonymous node/sails user",
+  "license": "",
+  "engines": {
+    "node": "^20.11"
+  },
+  "devDependencies": {
+    "nyc": "^15.1.0"
+  }
+}

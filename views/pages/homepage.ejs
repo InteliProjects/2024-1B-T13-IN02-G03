@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login</title>
+  <link rel="stylesheet" type="text/css" href="../../assets/styles/login.css" />
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body class="fundo" style="display: flex; justify-content: center; align-items: center">
+  <!-- Contêiner principal para o formulário de login -->
+  <div class="divLogin">
+    <!-- Contêiner interno para organizar o conteúdo do login -->
+    <div class="insideLogin">
+      <!-- Seção para o logo -->
+      <div id="logoLogin" style="margin-top: 88px;">
+        <!-- Imagem do logo da Dell -->
+        <img src="images/LogoDell.svg" alt="Logo da Dell" style="transform: scale(1.5)"/>
+      </div>
+
+      <!-- Seção para os campos de entrada do login -->
+      <div id="inputLogin" class="inputLogin">
+        <!-- Título da seção de login -->
+        <h2 class="fonte">Login</h2>
+        <!-- Contêiner para alinhar os campos de entrada -->
+        <div style="display: flex; align-items: center; width: 100%">
+          <!-- Formulário de login -->
+          <form style="display: flex; gap: 36px; flex-direction: column; width: 100%;" id="formLogin">
+            <div class="input-email">
+              <!-- Campo de entrada para o endereço de email -->
+              <input type="email" class="input" placeholder="Endereço de email" id="email" name="email" required/>
+
+              <img src="images/alert-error.svg" alt="Erro no email" class="error-icon" style="display: none;" id="icon-error-1">
+
+            </div>
+            <div class="input-senha">
+              <!-- Campo de entrada para a senha -->
+              <input type="password" class="input" placeholder="Senha" id="password" name="password" required/>
+
+              <img src="images/alert-error.svg" alt="Erro na senha" class="error-icon" style="display: none;" id="icon-error-2">
+
+            </div>
+            <!-- Campo de erro -->
+            <div>
+              <p id="error-message" class="helpText" style="display: none;"></p>
+              <!-- Botão de login dentro do formulário -->
+              <button class="designButton" type="submit" id="fazerLogin">Fazer Login</button>
+              <!-- Texto "Esqueci minha senha" -->
+              <p style="text-align: right; margin-top: 15px;"><a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" id="forgot-password" class="helpText">Esqueci minha senha</a></p>
+              <!--https://i.redd.it/kymhxrhjqn761.jpg-->
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById("formLogin")
+      .addEventListener("submit", function(event) {
+        event.preventDefault();
+
+        // Verifica se o login é válido
+        const email = document.getElementById("email").value;
+        const password = document.getElementById("password").value;
+
+        console.log("Email:", email);
+        console.log("Password:", password);
+
+        axios.post("/login", {
+          email,
+          password,
+        })
+        .then(function(response) {
+          console.log("Resposta recebida:", response);
+          const role = response.data.user.role;
+          const userId = response.data.user.id;
+          console.log("Role:", role);
+          console.log("ID: ", userId);
+
+          // Salva o Id do usuário que acabou de realizar o login
+          localStorage.setItem('userId', userId);
+
+          // Direciona o usuário a sua respectiva tela com base no login
+          if (role === 'administrador') {
+            window.location.href = '/dashboard';
+          } else if (role === 'membro') {
+            window.location.href = '/user';
+          } else {
+            console.error("Role desconhecido:", role);
+          }
+        })
+        .catch(function(error) {
+          // Exibe o erro no console
+          console.error("Erro ao logar:", error);
+
+          // Elemento HTML para exibir a mensagem de erro
+          const errorMessageElement = document.getElementById('error-message');
+          const errorEmailElement = document.getElementById('email');
+          const errorPasswordElement = document.getElementById('password');
+          const button = document.getElementById('fazerLogin');
+          const iconErro1 = document.getElementById('icon-error-1');
+          const iconErro2 = document.getElementById('icon-error-2');
+
+          // Função para exibir uma mensagem de erro
+          function showError(message) {
+            errorMessageElement.textContent = message;
+            errorMessageElement.style.display = 'block'; // Exibe a mensagem de erro
+            errorMessageElement.style.color = '#BB2A33';
+            errorMessageElement.style.fontSize = '13px';
+            button.style.marginTop = '26px';
+
+            // Switch utilizado para colorir qual input possui valores errados
+            switch (error.response.data.error){
+
+              // Em caso de um usuário não ser encontrado no sistema
+              case 'Usuário não encontrado':
+                errorEmailElement.style.border = '1px solid #BB2A33';
+                errorPasswordElement.style.border = '';
+                iconErro1.style.display = 'block';
+                iconErro2.style.display = 'none';
+                break
+
+              // Em caso da senha deste usuário estar errada
+              case 'Senha inválida':
+                errorPasswordElement.style.border = '1px solid #BB2A33';
+                errorEmailElement.style.border = '';
+                iconErro1.style.display = 'none';
+                iconErro2.style.display = 'block';
+                break
+            }
+          }
+
+
+          // Verifica o tipo de erro e exibe a mensagem adequada
+          if (error.response) {
+            console.error("Dados do erro:", error.response.data);
+            console.error("Status do erro:", error.response.status);
+            console.error("Cabeçalhos do erro:", error.response.headers);
+            console.log("Mensagem de erro:", error.response.data.error);
+            showError(`${error.response.data.error || 'Erro desconhecido'}`);
+          } else if (error.request) {
+            console.error("Nenhuma resposta recebida:", error.request);
+            showError('Nenhuma resposta recebida do servidor');
+          } else {
+            console.error("Erro na configuração da requisição:", error.message);
+            showError(`Erro na configuração da requisição: ${error.message}`);
+          }
+          console.error("Configuração da requisição:", error.config);
+        });
+      });
+  </script>
+</body>
+</html>

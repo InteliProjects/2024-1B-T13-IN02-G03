@@ -1,0 +1,113 @@
+
+.areaGraficos {
+    padding: 0 72px;
+    height: 100vh;
+    box-sizing: border-box;
+    background-color: var(--color-gray-100); /* Include padding in height calculation */
+}
+
+.flex-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+    height: 100%;
+}
+
+.flex-row {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    width: 100%;
+    height: 70%;
+}
+
+.flex-col {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+    height: 100%;
+}
+
+.graph {
+    border-radius: 2px;
+    padding: 32px;
+    box-sizing: border-box;
+    border: 1px solid #B6B6B6;
+    box-shadow: 4px 4px 4px rgba(0, 42, 88, 0.1);
+}
+
+.half-height {
+    height: calc(50% - 10px); /* Subtract the gap to fit within parent */
+}
+
+.quarter {
+    width: calc(25% - 7.5px); /* Adjust for the gap to avoid overflow */
+}
+
+.half {
+    width: calc(50% - 5px); /* Adjust for the gap to avoid overflow */
+}
+
+.forty {
+    width: calc(35% - 6.5px); /* Adjust for the gap to avoid overflow */
+}
+
+.twenty {
+    width: calc(30% - 7px); /* Adjust for the gap to avoid overflow */
+}
+
+
+.label {
+    margin-bottom: 24px;
+}
+
+.selectGroup {
+    background-color: transparent;
+    width: 100%;
+}
+
+
+.selectLine {
+    background-color: transparent;
+    width: 100%;
+}
+
+#grafico-users{
+    width: calc(35% - 6.5px);
+}
+
+@media screen and (max-width: 1080px) {
+    .flex-row {
+        flex-wrap: wrap;
+        height: 80%;
+    }
+    
+    .half, .full {
+        width: 100%;
+    }
+    .quarter{
+        width: calc(50% - 5px) ;
+        height: 50%;
+    }
+    .half{
+        width: 100%;
+        height: 50%;
+    }
+    .forty{
+        width: 100%;
+        height: 50%;
+    }
+    .twenty{
+        width: calc(50% - 5px);
+        height: 50%;
+    }
+    #grafico-users{
+        width: calc(50% - 5px);
+        height: 50%;
+    }
+    label{
+        font-size: 12px;
+    }
+}

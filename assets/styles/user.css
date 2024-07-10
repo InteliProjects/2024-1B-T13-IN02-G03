@@ -1,0 +1,210 @@
+.gerenciador{
+    padding:0px 72px;
+    height: 100%;
+    max-width: 100%;
+    display: flex;
+    flex-direction: row;
+    background-color: var(--color-background);
+    
+}
+.abas{
+    padding: 0 72px 0 28%;
+    background-color: var(--color-background);
+}
+.filter{
+    height: 70%;
+    width: 25%;
+    display: flex;
+    flex-direction: column;
+}
+.manuals{
+    width: 75%;
+    height: 70%;
+
+}
+.search{
+    width: 100%;
+    height: 15%;
+    align-items: flex-start;
+    display: flex;
+    gap: 2%;
+}
+.center{
+    align-items: center;
+    display: flex;
+    justify-content: center;
+}
+#list{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    gap: 16px 2%;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-content: flex-start;
+}
+#files {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    gap: 16px 16px;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-content: flex-start;
+}
+.fileSquare {
+    width: 211px;
+    height: 179px;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    border:  1px solid #B6B6B6;
+}
+.fileSquare:hover {
+    cursor: pointer;
+}
+.divIconeMaterial {
+    width: 100%;
+    height: 136px;
+    background-color: #DAF5FD;
+    display: flex;
+    justify-content: center;
+    align-items: center ;
+}
+.nomeMaterial {
+    width: 100%;
+    font-weight: 500;
+    font-size: 16px;
+    color: #0E0E0E;
+    white-space: nowrap;                  
+    overflow: hidden; /* "overflow" value must be different from "visible" */
+    text-overflow: ellipsis;
+}
+.nomeArquivo {
+    width: 100%;
+    background-color: #F5F6F7;
+    height: 43px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    padding-left: 16px;
+    padding-right: 16px;
+}
+.none{
+    display: none;
+}
+.icones{
+    width: 50%; 
+    background-color: var(--color-white);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+#loadMoreButton{
+    margin-top: 16px;
+    border: 0;
+    background-color: var(--color-blue-600);
+    color: white;
+    margin-bottom: 72px;
+    border-radius: 2px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 20px;
+    margin-bottom: 72px;
+
+}
+
+@media screen and (max-width: 1080px){
+    .manuals{
+        width: 100%;
+    }
+    .abas{
+        padding: 0px 72px;
+    }
+    .filter{
+        display: none;
+    }
+    .none{
+        display: flex;
+    }
+    .manual{
+        width: 49%;
+        height: 25%;
+    }
+    .search{
+        align-items: center;
+    }
+}
+
+.hovermanual{
+    min-height: 30%; 
+    width: 32%;
+    background-color: white;
+    border-radius: 2px;
+    border: 1px solid #b6b6b6;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    box-shadow: 4px 4px 4px rgba(0, 42, 88, 0.1);
+    font-size: 14px;
+}
+
+.hovermanual:hover { /* Adicionar hover nos manuais */
+    .icones {
+        background-color: var(--color-gray-200)
+    };
+    .informações {
+        background-color: var(--color-gray-200);
+    }
+}
+
+.manual:hover {
+    background-color: #E1E1E1; /* Altere a cor desejada */
+    color: #00468B; /* Altere a cor do texto */
+}
+
+.hovermanual {
+    cursor:pointer ; 
+}
+.boxAdd:hover {
+    background-color: #E1E1E1
+    ; /* Altere a cor desejada */
+}
+
+.concluir:hover{
+    background-color: var(--color-blue-700);
+}
+.concluir:active{
+    background-color: var(--color-blue-800);
+}
+
+#tab-mobile-just-0:hover {
+    background-color: #E1E1E1; 
+    color: #00468B; 
+}
+
+#tab-mobile-just-1:hover {
+    background-color: #E1E1E1; 
+    color: #00468B; 
+}
+
+#tab-mobile-just-2:hover {
+    background-color: #E1E1E1; 
+    color: #00468B; 
+}
+
+ /* Estilos para garantir que o loading cubra a tela */
+ #loading-indicator {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.8);
+    z-index: 1000;
+  }

@@ -1,0 +1,202 @@
+.janela-modal{
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background-color: var(--color-gray-blur);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    z-index: 999;
+    backdrop-filter: blur(2px);
+}
+.janela-modal.abrir{
+    display: flex;
+}
+.abrir .popup{
+    animation: abrirPop 1s;
+}
+.popup{
+    width: 80%;
+    height: 95%;
+    background-color: var(--color-gray-100);
+    margin-bottom: 48px;
+    margin-top: 48px;
+    overflow-y:scroll;
+}
+#janela-editar{
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background-color: var(--color-gray-blur);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    z-index: 999;
+    backdrop-filter: blur(2px);
+}
+#janela-editar.abrir{
+    display: flex;
+}
+.close{
+    position: relative;
+    top: 30px;
+    right: 30px;
+    cursor: pointer;
+    float: right;
+    transform: scale(0.8);
+}
+.conteudoEditar {
+    margin: 60px;
+}
+.conteudoEditar {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    align-content: space-between;
+}
+#nomeDoManual {
+    font-family: Roboto;
+    font-size: 40px;
+    font-weight: 300;
+}
+.insideGuide{
+    margin-left: 113px;
+    margin-right: 113px;
+    margin-top: 100px;
+    border: 0px;
+    background-color: var(--color-white);
+    display: flex;
+    flex-direction: column;
+    gap: 44px;
+}
+.itemEditar {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 20px;
+}
+#brancoEditar {
+    margin-left: 113px;
+    margin-right: 113px;
+    border: 0px;
+    background-color: var(--color-white);
+    display: flex;
+    flex-direction: column;
+    gap: 44px;
+}
+.concluir{
+    border-radius: 2px;
+    border: 1px;
+    border-color: var(--color-blue-600);
+    background-color: var(--color-blue-600);
+    color: var(--color-white);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 183px;
+    height: 52px;
+    cursor: pointer;
+    /* margin-top: 44px;
+    margin-bottom: 44px; */
+    float: right;
+    margin-right: 72px
+}
+#divClose {
+    width: 100%;
+    margin-bottom: 40px;
+}
+#corpoManual {
+    justify-content: space-between;
+    display: flex;
+    flex-direction: column;
+    gap: 48px;
+}
+.ajusteDiv{
+    display: flex;
+    flex-direction: column;
+    margin-left: 60px;
+    margin-right: 60px;
+}
+.ajusteLabel{
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-weight: 500;
+    font-size: 20px;
+    color: #0e0e0e;
+}
+.box{
+    width: 100%;
+    background-color: var(--color-gray-100);
+    border-color: var(--color-gray-800);
+    border-width: 1px;
+}
+.boxAdd{
+    display: flex;
+    background-color: var(--color-white);
+    border: 1px solid var(--color-gray-500);
+    margin-bottom: 48px;
+    width: 211px;
+    height: 211px;
+    justify-content: center;
+    align-items: center;
+    border-radius: 2px;
+}
+#materiais {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+#addExterno {
+    display: flex;
+    flex-direction: column;
+    gap: 60px;
+    justify-content: space-between;
+}
+#infosAdd {
+    margin-left: 113px;
+    margin-right: 113px;
+    margin-top: 100px;
+    border: 0px;
+    display: flex;
+    flex-direction: column;
+    gap: 44px;
+}
+#tituloEditar {
+    height: 45px;
+    width: 75%;
+    background-color: var(--color-gray-200);
+    border-width: 1px;
+    border-color: var(--color-gray-800);
+    padding: 12px;
+}
+#calendarioPubli {
+    transform: scale(0.8);
+}
+input[type = 'file']{
+    display: none;
+}
+
+#fileUpload{
+    height: 100%;
+    width: 100%;
+    cursor: pointer;
+}
+textarea{
+    resize: none;
+}
+@keyframes abrirPop {
+    from{
+        opacity: 0;
+        transform: translate3d(0, -20px, -5px);
+    }
+    to{
+        opacity: 1;
+        transform: translate3d(0,0,0);
+    }
+}

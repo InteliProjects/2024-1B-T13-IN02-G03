@@ -1,0 +1,24 @@
+.header {
+    background-color: var(--color-white);
+    height: 10%;
+    max-width: 100%;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+    align-items: center;
+    padding: 0px 72px;
+    align-content: end;
+
+  }
+  .sino{
+    width: 32px;
+    height: 32px;
+    transform: scale(1);
+  }
+  .icons{
+    display: flex;
+    align-items: center;
+    gap: 100px;
+    flex-wrap: wrap;
+
+  }

@@ -1,0 +1,1111 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <!-- Meta tags Obrigatórias -->
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+
+    <!-- Bootstrap CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css"
+      rel="stylesheet"
+    />
+
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+      integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="styles/admin.css" />
+    <link
+      rel="stylesheet"
+      crossorigin
+      href="https://dds.dell.com/components/2.35.1/css/dds-reboot.min.css"
+    />
+    <link
+      rel="stylesheet"
+      crossorigin
+      href="https://dds.dell.com/components/2.35.1/css/dds-fonts.min.css"
+    />
+    <link
+      rel="stylesheet"
+      crossorigin
+      href="https://dds.dell.com/components/2.35.1/css/dds-icons.min.css"
+    />
+    <link
+      rel="stylesheet"
+      crossorigin
+      href="https://dds.dell.com/components/2.35.1/css/dds-helpers.min.css"
+    />
+    <link
+      rel="stylesheet"
+      crossorigin
+      href="https://dds.dell.com/components/2.35.1/css/dds-main.min.css"
+    />
+    <script src="https://dds.dell.com/components/2.35.1/js/index.min.js"></script>
+    <title>DIVE</title>
+    <script>
+      function pesquisar(evento) {
+        const busca = evento.target.value.toLowerCase(); // Converte a busca para minúsculas
+        const lista = document.querySelector("#list").children;
+
+        Array.from(lista).forEach((item) => {
+          const texto = item.textContent.toLowerCase(); // Converte o texto do item para minúsculas
+          if (texto.includes(busca)) {
+            item.style.display = ""; // Mostra o item
+          } else {
+            item.style.display = "none"; // Esconde o item
+          }
+        });
+      }
+    </script> 
+  </head>
+  <body style="background-color: #f5f6f7">
+
+    <!-- Padrão Dell carregamento da página-->
+    <div class="dds__loading-indicator" id="loading-indicator">
+      <div class="dds__loading-indicator__spinner"></div>      
+    </div>
+     <!--  <div class="dds__loading-indicator__label">Carregando...</div>-->
+    </div> 
+    
+    <!--Adição componente "Header"-->
+    <%- include ('../componentes/header.ejs'); %>
+    <!--Adição do componente "Dashboard"-->
+    <%- include ('../componentes/abaAdmin.ejs'); %>
+    <div id="gerenciador" style="padding: 0px 72px">
+      <!--Espaço de filtragem-->
+      <div class="filter">
+        <h3 style="font-size: 20px; margin-bottom: 16px; font-weight: 400">
+          Tipo do Produto
+        </h3>
+        <label style="font-size: 16px; padding: 4px 12px"
+          ><input
+            type="checkbox"
+            value="servidor"
+            onchange="updateFilters(this)"
+          />
+          Servidor</label
+        >
+        <label style="font-size: 16px; padding: 4px 12px"
+          ><input
+            type="checkbox"
+            value="notebook"
+            onchange="updateFilters(this)"
+          />
+          Notebook</label
+        >
+        <label style="font-size: 16px; padding: 4px 12px"
+          ><input
+            type="checkbox"
+            value="desktop"
+            onchange="updateFilters(this)"
+          />
+          Desktop</label
+        >
+      </div>
+
+      <div class="manuals">
+        <!-- Seção visível apenas para telas menores-->
+        <div class="none">
+          <button class="dds__button dds__button--block" type="button">
+            Opções de Filtragem
+          </button>
+        </div>
+        <!-- Adição barra de pesquisa-->
+        <div class="search">
+          <div
+            style="width: 66%"
+            class="dds__search"
+            id="search-462688741"
+            data-dds="search"
+            role="search"
+          >
+            <div class="dds__search__wrapper">
+              <input
+                type="search"
+                class="dds__search__control"
+                name="search-control-411542040"
+                id="search-control-411542040"
+                autocomplete="off"
+                placeholder="Buscar"
+                aria-labelledby="search-label-411542040"
+                oninput="pesquisar(event)" <!-- Usa oninput para busca dinâmica -->
+            </div>
+          </div>
+
+          <div
+            style="width: 32%"
+            class="dds__select"
+            data-dds="select"
+            id="select-730995141"
+          >
+            <div class="dds__select__wrapper">
+              <select
+                style="background-color: white"
+                id="select-control-777389777"
+                aria-label="Select label"
+                class="dds__select__field"
+                aria-describedby="select-helper-777389777"
+              >
+                <option
+                  value="0"
+                  class="dds__select__option--placeholder"
+                  selected="true"
+                >
+                  Ordenar
+                </option>
+                <option value="2">Ordem alfabética (A-Z)</option>
+                <option value="1">Ordem alfabética (Z-A)</option>
+                <option value="4">Mais Recentes</option>
+                <option value="3">Mais Antigos</option>
+              </select>
+              <div id="select-error-777389777" class="dds__invalid-feedback">
+                Error text
+              </div>
+            </div>
+          </div>
+        </div>
+        <!--Listagem de manuais-->
+        <div id="list" style="height: 100%">
+          <!-- <div class="manual">
+            <button
+              style="
+                cursor: pointer;
+                font-size: 72px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: 100%;
+                height: 100%;
+                border: 0;
+                font-weight: 100;
+              "
+              onclick="abrirModal()"
+            >
+              +
+            </button>
+          </div> -->
+        </div>
+      </div>
+    </div>
+
+    <!--Pop-Up para adicionar novos manuais-->
+    <div class="janela-modal" id="janela-modal">
+      <div class="popup">
+        <form id="formularioAdicaoManual">
+          <img src="images/X.svg" alt="fechar" class="close" id="fechar" />
+          <div id="corpoManual">
+            <div class="insideGuide">
+              <div
+                id="titulo"
+                class="ajusteDiv"
+                style="margin-top: 48px; display: flex; gap: 28px"
+              >
+                <div class="ajusteLabel">
+                  <img src="images/Tag.svg" alt="Título" id="tag" />
+                  <label for="tag">Produto</label>
+                </div>
+                <div>
+                  <!--Input de título do manual-->
+                  <div id="opcoesAtribuicao">
+                    <div class="divOpcao">
+                      <div class="divOpcao" class="opcao">
+                        <select
+                          style="background-color: white"
+                          id="type"
+                          aria-label="Select label"
+                          class="dds__select__field"
+                          aria-describedby="select-helper-777389777"
+                          class="opcao"
+                        >
+                          <option
+                            value=""
+                            class="dds__select__option--placeholder"
+                            selected="true"
+                          >
+                            Selecione o tipo do produto
+                          </option>
+                          <option
+                            value="Notebook"
+                            class="dds__select__option--placeholder"
+                          >
+                            Notebook
+                          </option>
+                          <option
+                            value="Servidor"
+                            class="dds__select__option--placeholder"
+                          >
+                            Servidor
+                          </option>
+                          <option
+                            value="Desktop"
+                            class="dds__select__option--placeholder"
+                          >
+                            Desktop
+                          </option>
+                        </select>
+                        <div
+                          id="select-error-777389777"
+                          class="dds__invalid-feedback"
+                        >
+                          Error text
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="divOpcao">
+                      <div class="divOpcao" class="opcao">
+                        <input
+                          id="model"
+                          style="background-color: white"
+                          aria-label="Select label"
+                          class="dds__select__field"
+                          aria-describedby="select-helper-777389777"
+                          class="opcao"
+                          placeholder="Indique o modelo do produto"
+                        />
+                        <div
+                          id="select-error-777389777"
+                          class="dds__invalid-feedback"
+                        >
+                          Error text
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div
+                id="descricao"
+                class="ajusteDiv"
+                style="display: flex; gap: 28px"
+              >
+                <div class="ajusteLabel">
+                  <img
+                    src="images/Prancheta.svg"
+                    alt="Descrição"
+                    id="prancheta"
+                  />
+                  <label for="Descrição">Descrição</label>
+                </div>
+                <div>
+                  <!--Input de descrição do manual-->
+                  <textarea
+                    id="description"
+                    style="
+                      padding: 16px;
+                      height: 103px;
+                      border-radius: 2px;
+                      background-color: white;
+                    "
+                    class="box"
+                    rows="4"
+                    cols="50"
+                  ></textarea
+                  ><br />
+                </div>
+              </div>
+              <!--Caixa de atribuição de manuais-->
+              <div
+                id="atribuir"
+                class="ajusteDiv"
+                style="display: flex; gap: 28px"
+              >
+                <div class="ajusteLabel">
+                  <img
+                    src="images/Add_Pessoa.svg"
+                    alt="Atribuir"
+                    id="atribuir"
+                  />
+                  <label for="atribuir">Atribuir</label>
+                </div>
+                <div id="opcoesAtribuicao">
+                  <div class="divOpcao">
+                    <div class="divOpcao" class="opcao">
+                      <select
+                        style="
+                          background-color: white;
+                          width: 100%;
+                          border-radius: 2px;
+                          height: 3 rem;
+                        "
+                        id="groupsSelect"
+                        aria-label="Select label"
+                        aria-describedby="select-helper-777389777"
+                        class="selectGroup"
+                        name="states[]"
+                        multiple="multiple"
+                      ></select>
+                      <div
+                        id="select-error-777389777"
+                        class="dds__invalid-feedback"
+                      >
+                        Error text
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <label class="dds__checkbox__label" for="checkbox-input-1">
+                    <input
+                      type="checkbox"
+                      tabindex="0"
+                      id="checkbox-input-1"
+                      name="name"
+                      class="dds__checkbox__input"
+                    />
+                    <span>Importante</span>
+                  </label>
+                </div>
+              </div>
+
+              <div
+                id="conteudos"
+                class="ajusteDiv"
+                style="display: flex; gap: 28px"
+              >
+                <div class="ajusteLabel">
+                  <img
+                    src="images/Materiais.svg"
+                    alt="Conteúdos"
+                    id="conteudo"
+                  />
+                  <label for="conteudo">Conteúdos</label>
+                </div>
+                <div
+                  style="
+                    display: flex;
+                    justify-content: space-between;
+                    flex-direction: row;
+                    flex-wrap: wrap;
+                  "
+                >
+                  <div class="boxAdd" style="border-radius: 2px">
+                    <label
+                      style="font-size: 72px; font-weight: 100"
+                      class="fileUpload"
+                      for="selecao-arquivo"
+                      >+</label
+                    >
+                    <input id="selecao-arquivo" type="file" />
+                  </div>
+                  <span id="file-name"></span>
+                </div>
+              </div>
+            </div>
+
+            <div id="divClose">
+              <button type="submit" id="concluir" class="concluir">
+                Concluir
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+    <div id="janela-editar">
+      <div class="popup">
+        <form id="edicaoManual">
+          <img src="images/X.svg" alt="fechar" class="close" id="xs" />
+          <div id="addExterno">
+            <div id="infosAdd">
+              <h2 id="nomeDoManual"></h2>
+            </div>
+            <div id="brancoEditar">
+              <div class="conteudoEditar">
+                <div id="descricaoEditar" class="itemEditar">
+                  <div class="ajusteLabel">
+                    <img
+                      src="images/Prancheta.svg"
+                      alt="Descrição"
+                      id="prancheta"
+                    />
+                    <label for="Descrição">Descrição</label>
+                  </div>
+                  <!--Input de descrição do manual-->
+                  <div id="textArea"></div>
+                </div>
+                <div id="atribuirEditar" class="itemEditar">
+                  <div class="ajusteLabel">
+                    <img
+                      src="images/Add_Pessoa.svg"
+                      alt="Atribuir"
+                      id="atribuir"
+                    />
+                    <label for="atribuir">Arquivos associados</label>
+                  </div>
+                  <div id="arquivos"></div>
+                </div>
+                <div id="files"></div>
+              </div>
+              
+            </div>
+            <div id="divClose">
+              <button type="submit" id="submitEdit" class="concluir">
+                Concluir
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+    <script
+      src="https://code.jquery.com/jquery-3.7.1.js"
+      integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+      crossorigin="anonymous"
+    ></script>
+
+    <script>
+      $(document).ready(function () {
+        $(".selectGroup").select2({
+          placeholder: "Selecione as linhas de produção",
+        });
+      });
+
+      const adicionarManual = document.getElementById("selecao-arquivo");
+      const nomeManual = document.getElementById("file-name");
+      let valores = [];
+      let valoresParaEdit = [];
+
+      adicionarManual.addEventListener("change", function () {
+        valores.push(adicionarManual.value);
+        nomeManual.textContent = valores;
+        console.log(valores);
+      });
+      // Definição abertura e fechamento do pop-up
+      const modal = document.getElementById("janela-modal");
+
+      function abrirModal() {
+        valores = []
+
+        modal.classList.add("abrir");
+        document.body.style.overflow = "hidden";
+        modal.addEventListener("click", (e) => {
+          if (
+            e.target.id == "fechar" ||
+            e.target.id == "janela-modal" ||
+            e.target.id == "concluir"
+          ) {
+            modal.classList.remove("abrir");
+            document.body.style.overflow = "auto";
+            document.getElementById("file-name").textContent = "";
+            carregarListaManuais();
+          }
+        });
+      }
+
+      const modalEditar = document.getElementById("janela-editar");
+    </script>
+    <!-- JavaScript (Opcional) -->
+    <!-- jQuery primeiro, depois Popper.js, depois Bootstrap JS -->
+    <script
+      src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+      integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+      integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
+      integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+      crossorigin="anonymous"
+    ></script>
+    <script>
+      //cria a função forEachReverse() ao contrário da disposição natural do BD
+      Array.prototype.forEachReverse = function (callback) {
+        const length = this.length;
+        for (let i = length - 1; i >= 0; i--) {
+          callback(this[i], i);
+        }
+      };
+      const element1 = document.getElementById("search-462688741");
+      DDS.Search(element1);
+      const element = document.getElementById("sidenav-178243990");
+      DDS.SideNav(element);
+      const element4 = document.getElementById("tag-256477090");
+      DDS.Tag(element4, { dismiss: true });
+      const element5 = document.getElementById("select-730995141");
+      DDS.Select(element5);
+      const element6 = document.getElementById("tabs-381787046");
+      DDS.Tabs(element6);
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script>
+      fetch("/group")
+        .then((response) => response.json())
+        .then((data) => {
+          const groupSelect = document.getElementById("groupsSelect");
+          const linhasFiltradas = [];
+          data.forEach((group) => {
+            if (!linhasFiltradas.includes(group.assembly_line)) {
+              linhasFiltradas.push(group.assembly_line);
+              console.log(linhasFiltradas);
+            }
+          });
+          linhasFiltradas.forEach((linha) => {
+            console.log(linha);
+
+            const option1 = document.createElement("option");
+            option1.value = linha;
+            option1.textContent = "Linha " + linha;
+            groupSelect.appendChild(option1);
+
+          });
+        })
+        .catch((error) => console.error("Error fetching groups:", error));
+
+      let order = 0;
+      document
+        .getElementById("select-control-777389777")
+        .addEventListener("change", () => {
+          order = document.getElementById("select-control-777389777").value;
+          console.log(order);
+          carregarListaManuais();
+        });
+
+      let filters = [];
+      function updateFilters(checkbox) {
+        if (checkbox.checked) {
+          filters.push(checkbox.value.toLowerCase());
+        } else {
+          filters = filters.filter(
+            (filter) => filter !== checkbox.value.toLowerCase()
+          );
+        }
+        carregarListaManuais(); // Recarrega a lista de manuais com os novos filtros
+      }
+
+      let currentIndex = 0; // Variável global para rastrear o índice atual
+      const increment = 11; // Número de manuais a serem carregados por vez
+      let manuaisGlobais = []; // Armazena todos os manuais globalmente
+
+      function carregarListaManuais() {
+        let listElement = document.getElementById("list");
+
+        if (currentIndex === 0) {
+          listElement.innerHTML = `
+      <div class="manual">
+        <button
+          style="
+            cursor: pointer;
+            font-size: 72px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+            border: 0;
+            font-weight: 100;
+          "
+          onclick="abrirModal()"
+        >
+          +
+        </button>
+      </div>`;
+        }
+
+        axios
+          .get("/handbook")
+          .then(function (response) {
+            manuaisGlobais = response.data;
+
+            if (filters.length > 0) {
+              manuaisGlobais = manuaisGlobais.filter((a) => {
+                return filters.some((filter) =>
+                  a.title.toLowerCase().includes(filter)
+                );
+              });
+            }
+
+            if (order === "2") {
+              manuaisGlobais = manuaisGlobais.sort((a, b) =>
+                a.title.localeCompare(b.title)
+              );
+            } else if (order === "1") {
+              manuaisGlobais = manuaisGlobais.sort((a, b) =>
+                b.title.localeCompare(a.title)
+              );
+            } else if (order === "3") {
+              manuaisGlobais = manuaisGlobais.sort(
+                (a, b) => new Date(a.createdAt) - new Date(b.createdAt)
+              );
+            } else if (order === "4") {
+              manuaisGlobais = manuaisGlobais.sort(
+                (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+              );
+            }
+
+            renderizarManuaisIniciais();
+          })
+          .catch(function (error) {
+            console.error("Erro ao carregar lista de manuais:", error);
+          });
+      }
+
+      function renderizarManuaisIniciais() {
+        const listElement = document.getElementById("list");
+        const slicedManuais = manuaisGlobais.slice(
+          currentIndex,
+          currentIndex + increment
+        );
+
+        slicedManuais.forEach(function (manual) {
+          const idDoManual = manual.id;
+          const manualElement = document.createElement("div");
+          manualElement.id = manual.id;
+          manualElement.className = "hovermanual";
+          manualElement.className = "manual";
+
+          let manualImage;
+          if (manual.title.includes("Notebook")) {
+            manualImage = "images/Notebook.svg";
+          } else if (manual.title.includes("Servidor")) {
+            manualImage = "images/Servidor.svg";
+          } else if (manual.title.includes("Desktop")) {
+            manualImage = "images/Desktop.svg";
+          } else {
+            manualImage = "";
+          }
+
+          manualElement.innerHTML = `
+      <div class='icones'>
+        <img src=${manualImage} alt="Icone desktop">
+      </div>
+      <div class="informações" style='width: 50%; padding: 24px 16px'>
+        <h4 style='line-height:24px; font-weight:600; color: var(--color-blue-600); font-size: 16px'>${manual.title}</h4>
+      </div>
+    `;
+
+          manualElement.addEventListener("click", (e) => {
+            e.stopPropagation();
+            console.log("Manual clicado:", idDoManual);
+            pegarMateriais(idDoManual);
+            nomeEdata(idDoManual);
+            abrirModalEditar();
+          });
+
+          listElement.appendChild(manualElement);
+        });
+
+        let loadMoreButton = document.getElementById("loadMoreButton");
+        if (loadMoreButton) {
+          loadMoreButton.remove();
+        }
+
+        if (currentIndex + increment < manuaisGlobais.length) {
+          const loadMoreDiv = document.createElement("div");
+          loadMoreDiv.style.height = '30%'
+          loadMoreDiv.style.width = '100%'
+          loadMoreDiv.innerHTML = `
+            <button style='height: 40%; width: 100%' id="loadMoreButton" class="load-more">Carregar mais</button>
+           `;
+          listElement.appendChild(loadMoreDiv);
+
+          document
+            .getElementById("loadMoreButton")
+            .addEventListener("click", () => {
+              currentIndex += increment;
+              renderizarManuaisIniciais();
+              loadMoreDiv.remove();
+
+            });
+        }
+      }
+
+      function nomeEdata(data) {
+        const idManual = data;
+        axios
+          .get(`handbook/${idManual}`)
+          .then(function (response) {
+            const manual = response.data;
+            console.log(manual);
+            document.getElementById(
+              "nomeDoManual"
+            ).textContent = `${manual.title}`;
+            document.getElementById("textArea").innerHTML = `
+        <textarea
+          id="descriptionEdit"
+          style="padding: 16px; height: 103px; border-radius: 2px; background-color: white;"
+          class="box"
+          rows="4"
+          cols="50"
+        >${manual.description}</textarea>`;
+            document.getElementById("divClose").innerHTML = `
+        <button type="submit" id="submitEdit" class="concluir">
+          Concluir
+        </button>`;
+
+            const formEdit = document.getElementById("edicaoManual");
+            formEdit.addEventListener("submit", (event) => {
+              event.preventDefault();
+              console.log(idManual);
+              const descriptionEdit =
+                document.getElementById("descriptionEdit");
+              const newEdit = descriptionEdit.value;
+              criarMateriaisAoEditar(idManual)
+              axios
+                .put(`/handbook/${idManual}`, { description: newEdit })
+                .then((response) => console.log("Edição concluída com sucesso"))
+                .catch((error) =>
+                  console.error("Erro ao editar o manual", error)
+                );
+            });
+          })
+          .catch(function (error) {
+            console.error("Erro ao carregar o nome do manual:", error);
+          });
+      }
+
+      function pegarMateriais(data) {
+
+
+axios.get(`/handbook/${data}/materials`)
+    .then((response) => {
+        const materials = response.data;
+        const materialElement = document.getElementById("files");
+        // Adicionar botão de input file com atributo multiple
+        materialElement.innerHTML = `
+            <div class="boxAdd" style="border-radius: 2px; height: 179px ; width: 211px;">
+                <label
+                    style="font-size: 72px; font-weight: 100; width: 100%; height: 100%; display: flex; justify-content: center; align-items: center;"
+                    class="fileUpload"
+                    for="selecao-arquivo-edit"
+                >+</label>
+                <input id="selecao-arquivo-edit" type="file" multiple/>
+            </div>
+        `;
+
+        materials.forEach((material) => {
+            let fileTypeIcon;
+            switch (material.type.toUpperCase()) {
+                case 'IMAGEM':
+                case 'PNG':
+                    fileTypeIcon = 'IMG.svg';
+                    break;
+                case 'VIDEO':
+                case 'MP4':
+                    fileTypeIcon = 'VIDEO.svg';
+                    break;
+                case 'DOCUMENTO':
+                case 'PDF':
+                case 'TXT':
+                    fileTypeIcon = 'PDF.svg';
+                    break;
+                case '3D':
+                case 'STL':
+                    fileTypeIcon = '3D.svg';
+                    break;
+                default:
+                    fileTypeIcon = 'OTHER.svg';
+            }
+
+            materialElement.innerHTML += `
+                <div id='${material.id}' class="fileSquare">
+                    <div class="XeIcone">
+                        <div class="divXmaterial">
+                            <img src="images/X.svg" alt="Sair" class="xMaterial" onclick='apagarMaterial(${material.id})'/>
+                        </div>
+                        <div class='fileIcone'>
+                            <img src="images/${fileTypeIcon}" alt="Icone ${material.type.toLowerCase()}" class="iconeMaterial">
+                        </div>
+                    </div>
+                    <div class="nomeArquivo">
+                        <label class="nomeMaterial">${material.file}</label>
+                    </div>
+                </div>
+            `;
+        });
+
+        const adicionarMaterialEdit = document.getElementById("selecao-arquivo-edit");
+        adicionarMaterialEdit.addEventListener("change", function (event) {
+            const selectedFiles = Array.from(event.target.files);
+            selectedFiles.forEach(file => {
+                arquivosSelecionados.push(file);
+
+                const fileType = file.type.split('/')[1].toUpperCase();
+                let fileTypeIcon;
+                switch (fileType) {
+                    case 'JPEG':
+                    case 'PNG':
+                        fileTypeIcon = 'IMG.svg';
+                        break;
+                    case 'MP4':
+                        fileTypeIcon = 'VIDEO.svg';
+                        break;
+                    case 'PDF':
+                    case 'TXT':
+                        fileTypeIcon = 'PDF.svg';
+                        break;
+                    case 'STL':
+                        fileTypeIcon = '3D.svg';
+                        break;
+                    default:
+                        fileTypeIcon = 'OTHER.svg';
+                }
+
+                materialElement.innerHTML += `
+                    <div class="fileSquare">
+                        <div class="XeIcone">
+                            <div class="divXmaterial">
+                                <img src="images/X.svg" alt="Sair" class="xMaterial" />
+                            </div>
+                            <div class='fileIcone'>
+                                <img src="images/${fileTypeIcon}" alt="Icone ${fileType.toLowerCase()}" class="iconeMaterial">
+                            </div>
+                        </div>
+                        <div class="nomeArquivo">
+                            <label class="nomeMaterial">${file.name}</label>
+                        </div>
+                    </div>
+                `;
+                
+            });
+            adicionarMaterialEdit.value = "";
+            console.log(arquivosSelecionados); // Para verificar os arquivos selecionados
+        });
+    })
+    .catch(function (error) {
+        console.error("Erro ao carregar os arquivos do manual", error);
+    });
+}
+
+      function abrirModalEditar() {
+        arquivosSelecionados = []
+        console.log(arquivosSelecionados)
+        const modalEditar = document.getElementById("janela-editar");
+        if (modalEditar) {
+          modalEditar.classList.add("abrir");
+          document.body.style.overflow = "hidden";
+          modalEditar.addEventListener("click", fecharModalEditar);
+        } else {
+          console.error("Elemento 'modalEditar' não encontrado.");
+        }
+      }
+
+      function fecharModalEditar(e) {
+        if (
+          e.target.id === "xs" ||
+          e.target.id === "janela-editar" ||
+          e.target.id === "submitEdit"
+        ) {
+          const modalEditar = document.getElementById("janela-editar");
+          if (modalEditar) {
+            modalEditar.classList.remove("abrir");
+            document.body.style.overflow = "auto";
+            modalEditar.removeEventListener("click", fecharModalEditar);
+          } else {
+            console.error("Elemento 'modalEditar' não encontrado.");
+          }
+        }
+      }
+
+      // Carregar lista de manuais ao carregar a página
+      document.addEventListener("DOMContentLoaded", function () {
+      carregarListaManuais();
+      });
+
+      document
+        .getElementById("formularioAdicaoManual")
+        .addEventListener("submit", async function () {
+          event.preventDefault();
+
+          const type = document.getElementById("type").value;
+          const model = document.getElementById("model").value;
+          const name = `${type} ${model}`;
+          let id_product;
+
+          await axios
+            .post("/product", {
+              type: type,
+              model: model,
+              name: name,
+            })
+            .then((response) => {
+              id_product = response.data.id;
+              criarManuais(id_product, name);
+              document.getElementById("model").value = ""
+              modal.classList.remove("abrir");
+          document.body.style.overflow = "auto";
+          document.getElementById("file-name").textContent = "";
+          carregarListaManuais();
+            });
+        });
+
+      function criarManuais(ref, nome) {
+        const description = document.getElementById("description").value;
+        const version = "1.0";
+        let id_handbooks;
+
+        axios
+          .post("/handbook", {
+            title: nome,
+            version: version,
+            description: description,
+            id_products: ref,
+          })
+          .then(function (response) {
+            id_handbooks = response.data.id;
+            console.log(id_handbooks);
+            criarMateriais(id_handbooks);
+            criarTasks(id_handbooks);
+            console.log("Criou Manual");
+            document.getElementById("description").value = "";
+          })
+          .catch(function (error) {
+            console.error("Erro ao criar manual:", error);
+          });
+      }
+
+      function criarMateriais(data) {
+        // Mova a declaração de id_materials para fora do escopo da função
+        console.log(valores);
+        let type;
+
+        valores.forEach((valor) => {
+          if (
+            valor.includes(".png") ||
+            valor.includes(".jpg") ||
+            valor.includes(".svg")
+          ) {
+            type = "Imagem";
+          } else if (valor.includes(".mov") || valor.includes(".mp4")) {
+            type = "Video";
+            console.log(type);
+          } else if (valor.includes(".pdf")) {
+            type = "Documento";
+          } else if (valor.includes(".fbx") || valor.includes(".obj")) {
+            type = "3D";
+          } else {
+            type = "outro";
+          }
+
+          axios
+            .post("/material", {
+              file: valor,
+              type: type,
+              title: "Nome do material",
+              id_handbooks: data,
+            })
+            .then(function (response) {
+              console.log("Criou Material");
+            })
+            .catch(function (error) {
+              console.error("Erro ao criar material:", error);
+            });
+        });
+      }
+      function criarMateriaisAoEditar(id) {
+        // Mova a declaração de id_materials para fora do escopo da função
+      console.log(arquivosSelecionados)
+      arquivosSelecionados.forEach((arquivo)=>{
+        let file = arquivo.name
+        if (
+            file.includes(".png") ||
+            file.includes(".jpg") ||
+            file.includes(".svg")
+          ) {
+            type = "Imagem";
+          } else if (file.includes(".mov") || file.includes(".mp4")) {
+            type = "Video";
+            console.log(type);
+          } else if (file.includes(".pdf")) {
+            type = "Documento";
+          } else if (file.includes(".fbx") || file.includes(".obj")) {
+            type = "3D";
+          } else {
+            type = "outro";
+          }
+          axios
+            .post("/material", {
+              file: file,
+              type: type,
+              title: "Nome do material",
+              id_handbooks: id,
+            })
+            .then(function (response) {
+              console.log("Criou Material");
+              carregarListaManuais();
+            })
+            .catch(function (error) {
+              console.error("Erro ao criar material:", error);
+            });
+      })
+          
+          };
+        
+      function criarTasks(data) {
+        console.log(data);
+        event.preventDefault();
+        var selectedValues = $(".selectGroup").val();
+        console.log(selectedValues);
+
+        let valorGroup = groupsSelect.value;
+        let checkbox = document.getElementById("checkbox-input-1");
+        let valorCheckbox = checkbox.value;
+        if (valorCheckbox === "on") {
+          valorCheckbox = true;
+        } else {
+          valorCheckbox = false;
+        }
+
+        selectedValues.forEach((line) => {
+          axios
+            .get(`/group/${line}/linhas`)
+            .then(function (response) {
+              let linhas = response.data;
+
+              linhas.forEach((linha) => {
+                axios
+                  .post("/task", {
+                    read: false,
+                    important: valorCheckbox,
+                    id_users: linha,
+                    id_handbooks: data,
+                  })
+                  .then(function (response) {
+                    console.log("Criou Task");
+                  });
+              });
+            })
+            .catch();
+        });
+      }
+      function apagarMaterial(data){
+    console.log(data)
+    const materialElement = document.getElementById("files");
+    const divId = document.getElementById(`${data}`)
+    materialElement.removeChild(divId)
+    axios
+    .delete(`/material/${data}`).then((response)=>{
+   }).catch()
+  }
+
+  document.addEventListener("DOMContentLoaded", function () {
+      console.log("DOM completamente carregado e analisado.");
+      // Simula um atraso artificial de 2 segundos
+     // setTimeout(function() {
+        // Seleciona todos os elementos, exceto o indicador de carregamento
+        var elementos = document.querySelectorAll('body > *:not(#loading-indicator)');
+        
+        // Exibe todos os elementos
+        elementos.forEach(function(elemento) {
+          elemento.classList.remove('hidden');
+        });
+        
+        // Oculta o indicador de carregamento
+        document.getElementById("loading-indicator").style.display = "none";
+      }, 2000); // Ajuste o tempo conforme necessário para testar
+   ;
+  let arquivosSelecionados = [];
+    </script>
+  </body>
+</html>

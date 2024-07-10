@@ -1,0 +1,289 @@
+
+body {
+    font-family: Roboto;
+}
+#gerenciador{
+    padding: 72px;
+    height: 100%;
+    max-width: 100%;
+    display: flex;
+    flex-direction: row;
+    background-color: var(--color-background);
+    
+}
+#files {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    gap: 16px 16px;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-content: flex-start;
+}
+
+#filter{
+    height: 70%;
+    width: 25%;
+    display: flex;
+    flex-direction: column;
+}
+.manuals{
+    width: 75%;
+    height: 70%;
+
+}
+.search{
+    width: 100%;
+    height: 20%;
+    align-items: flex-start;
+    display: flex;
+    gap: 2%;
+}
+.center{
+    align-items: center;
+    display: flex;
+    justify-content: center;
+}
+#list{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    gap: 16px 2%;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-content: flex-start;
+}
+.manual{
+    height: 30%; 
+    width: 32%;
+    background-color: white;
+    border-radius: 2px;
+    border: 1px solid #b6b6b6;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    box-shadow: 4px 4px 4px rgba(0, 42, 88, 0.1);
+    font-size: 14px;
+}
+.none{
+    display: none;
+}
+#fileUpload{
+    height: 100%;
+    width: 100%;
+}
+#opcoesAtribuicao {
+    display: flex;
+    gap: 10px;
+}
+.divOpcao{
+    width: 100%;
+}
+.opcao{
+    width: 100%;
+}
+#infosAdd{
+    margin: 72px;
+}
+#brancoEditar{
+    margin: 0px 72px
+}
+#addExterno {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    justify-content: space-between;
+}
+#infosAdd{
+    margin-bottom: 0px;
+}
+.XeIcone {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: row-reverse;
+    background-color: #DAF5FD;
+}
+.xMaterial {
+    transform: scale(0.55);
+}
+.divXmaterial {
+    z-index: 2;
+    position: relative;
+}
+.plusSquare {
+    width: 211px;
+    height: 179px;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    border:  1px solid #B6B6B6;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.plusSquare:hover {
+    cursor: pointer;
+}
+.plusMaterial {
+    font-size: 100px;
+    font-weight: 100;
+    color: #0e0e0e;
+}
+#files {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    gap: 16px 16px;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-content: flex-start;
+
+}
+.fileSquare {
+    width: 211px;
+    height: 179px;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    border:  1px solid #B6B6B6;
+}
+.fileSquare:hover {
+    cursor: pointer;
+}
+.fileIcone {
+    height: 136px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 211px;
+    z-index: 1;
+    position: relative;
+    left: 15px;
+}
+.iconeMaterial {
+    justify-self: center;
+    align-self: center ;
+}
+.nomeMaterial {
+    width: 100%;
+    font-weight: 500;
+    font-size: 16px;
+    color: #0E0E0E;
+    white-space: nowrap;                  
+    overflow: hidden; 
+    text-overflow: ellipsis;
+}
+.nomeArquivo {
+    width: 100%;
+    height: 43px;
+    background-color: #F5F6F7;
+    height: 43px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    padding-left: 16px;
+    padding-right: 16px;
+}
+
+
+.hovermanual{
+    min-height: 30%; 
+    width: 32%;
+    background-color: white;
+    border-radius: 2px;
+    border: 1px solid #b6b6b6;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    box-shadow: 4px 4px 4px rgba(0, 42, 88, 0.1);
+    font-size: 14px;
+}
+
+.hovermanual:hover { /* Adicionar hover nos manuais */
+    .icones {
+        background-color: var(--color-gray-200)
+    };
+    .informações {
+        background-color: var(--color-gray-200);
+    }
+}
+
+.hovermanual {
+    cursor: pointer; /* Adiciona pointer nos manuais */
+}
+
+.manual {
+    cursor: pointer; /* Adiciona pointer em adicionar manuais */
+}
+
+.boxAdd {
+    cursor: pointer; /* Adicionar pointer no adicionar materiais dos manuais */
+}
+
+.fileUpload{
+    cursor: pointer; /* Adicionar pointer no adicionar materiais dos manuais, no "+" */
+}
+
+.fileUpload{
+    color: #00468B; /* Altere a cor do texto */
+}
+
+.plusSquare {
+    cursor:pointer ; /* Adicionar pointer no editar materiais dos manuais */
+}
+
+.plusSquare{
+    background-color: var(--color-gray-200);
+    color: #00468B; /* Altere a cor do texto */
+}
+
+#aba1.dds__tabs__tab:hover {
+    background-color: var(--color-gray-200);
+    color: #00468B; /* Altere a cor do texto */   
+}
+
+#aba2.dds__tabs__tab:hover {
+    background-color: var(--color-gray-200);
+    color: #00468B; /* Altere a cor do texto */   
+}
+
+ /* Estilos para garantir que o loading cubra a tela */
+    #loading-indicator {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(255, 255, 255, 0.8);
+      z-index: 1000;
+    }
+    
+    @media screen and (max-width: 1080px){
+        .manuals{
+            width: 100%;
+        }
+        .abas{
+            padding: 0px 72px;
+        }
+        .filter{
+            display: none;
+        }
+        .none{
+            display: flex;
+        }
+        .manual{
+            width: 49%;
+        }
+        .search{
+            align-items: center;
+        }
+        h4{
+            font-size: 12px;
+        }
+    
+    }
